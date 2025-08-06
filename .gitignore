@@ -8,7 +8,6 @@ __pycache__/
 *.pot
 *.pyc
 *.pyo
-*.sqlite3
 *.db
 
 # Environment

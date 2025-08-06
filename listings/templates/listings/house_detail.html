@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5" style="min-height: 80vh; margin-top: 80px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <!-- Property Hero Card -->
+            <div class="card shadow-lg border-0 rounded-4 mb-4">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-5">
+                        {% if house.images.all %}
+                            <div id="propertyImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    {% for img in house.images.all %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <img src="{{ img.image.url }}"
+                                            class="img-fluid w-100 rounded-start"
+                                            style="height: 400px; object-fit: cover;"
+                                            alt="{{ house.name }}">
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% if house.images.count > 1 %}
+                                <button class="carousel-control-prev" type="button" data-bs-target="#propertyImagesCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#propertyImagesCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
+                                {% endif %}
+                            </div>
+                        {% elif house.image %}
+                            <img src="{{ house.image.url }}"
+                                class="img-fluid w-100 rounded-start"
+                                style="height: 400px; object-fit: cover;"
+                                alt="{{ house.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/600x400?text=No+Image"
+                                class="img-fluid w-100 rounded-start"
+                                style="height: 400px; object-fit: cover;"
+                                alt="No image">
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="card-body p-4">
+                            <h2 class="card-title fw-bold">{{ house.name }}</h2>
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge bg-primary fs-6 me-2"><i class="fa fa-map-marker-alt me-1"></i> {{ house.location }}</span>
+                                <span class="text-muted ms-2"><i class="fa fa-calendar-alt me-1"></i> Listed {{ house.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            <h3 class="text-success fw-bold mb-3">₹ {{ house.price }}</h3>
+                            <div class="d-flex gap-3 mb-3">
+                                <span class="badge bg-light text-dark border"><i class="fa fa-bed me-1 text-primary"></i> {{ house.bedrooms }} Bedrooms</span>
+                                <span class="badge bg-light text-dark border"><i class="fa fa-couch me-1 text-primary"></i> {{ house.beds }} Beds</span>
+                                <span class="badge bg-light text-dark border"><i class="fa fa-bath me-1 text-primary"></i> {{ house.bathrooms }} Baths</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted">Listed by <strong>{{ house.author.username }}</strong></span>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-1"><strong>Contact:</strong></p>
+                                <p class="text-muted mb-1">Name: {{ house.contact_name }}</p>
+                                <p class="text-muted mb-1">Mobile Number: 
+                                    {{ house.contact_mobile }}
+                                </p>
+                                <p class="text-muted mb-0">Email: 
+                                    {{ house.contact_email }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Description Block -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-2"><i class="fa fa-align-left me-2 text-primary"></i> Description</h5>
+                    <p class="mb-0">{{ house.description }}</p>
+                </div>
+            </div>
+
+            <!-- Comments and Reviews Section -->
+            <div class="row g-4">
+                <!-- Comments Section -->
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100 d-flex flex-column">
+                        <div class="card-header bg-white border-bottom pb-2">
+                            <h5 class="fw-bold mb-0">
+                                <i class="fa fa-comments me-2 text-primary"></i> Comments
+                            </h5>
+                        </div>
+                        <div class="card-body flex-grow-1 overflow-auto">
+                            {% if comments %}
+                                {% for comment in comments %}
+                                <div class="d-flex mb-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width:40px;height:40px;font-size:1.2rem;color:#0d6efd;">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <div class="fw-bold">{{ comment.author.username }}</div>
+                                        <div class="text-muted small mb-1">{{ comment.created_at|date:"M d, Y H:i" }}</div>
+                                        <div>{{ comment.text }}</div>
+                                    </div>
+                                </div>
+                                <hr class="my-2">
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-muted">No comments yet.</div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white border-top pt-2">
+                            {% if user.is_authenticated %}
+                                <form method="post" action="">
+                                    {% csrf_token %}
+                                    <div class="mb-2">
+                                        {{ comment_form.text }}
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fa fa-paper-plane me-1"></i> Add Comment
+                                    </button>
+                                </form>
+                            {% else %}
+                                <div class="alert alert-info mb-0">
+                                    <a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add a comment.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100 d-flex flex-column">
+                        <div class="card-header bg-white border-bottom pb-2">
+                            <h5 class="fw-bold mb-0">
+                                <i class="fa fa-star text-warning me-2"></i> Reviews
+                            </h5>
+                        </div>
+                        <div class="card-body flex-grow-1 overflow-auto">
+                            {% if average_rating %}
+                            <div class="mb-3">
+                                <span class="fs-5 fw-bold text-warning">
+                                    {% for i in "12345"|slice:":average_rating|floatformat:0" %}<i class="fa fa-star"></i>{% endfor %}
+                                    {% for i in "12345"|slice:"average_rating|floatformat:0:" %}<i class="fa fa-star text-secondary"></i>{% endfor %}
+                                </span>
+                                <span class="ms-2">Average Rating: <strong>{{ average_rating|floatformat:1 }}</strong> / 5</span>
+                            </div>
+                            {% else %}
+                            <div class="text-muted mb-3">No reviews yet.</div>
+                            {% endif %}
+
+                            {% if reviews %}
+                                {% for review in reviews %}
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:1.1rem;color:#0d6efd;">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                        <div class="ms-2">
+                                            <span class="fw-bold">{{ review.author.username }}</span>
+                                            <span class="text-muted small ms-2">{{ review.created_at|date:"M d, Y H:i" }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-1">
+                                        {% for i in "12345"|slice:":review.rating" %}<i class="fa fa-star text-warning"></i>{% endfor %}
+                                        {% for i in "12345"|slice:"review.rating:" %}<i class="fa fa-star text-secondary"></i>{% endfor %}
+                                    </div>
+                                    <div>{{ review.text }}</div>
+                                </div>
+                                <hr class="my-2">
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white border-top pt-2">
+                            {% if user.is_authenticated and not has_reviewed %}
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <div class="mb-2">
+                                    {{ review_form.rating }}
+                                </div>
+                                <div class="mb-2">
+                                    {{ review_form.text }}
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fa fa-star me-1"></i> Add Review
+                                </button>
+                            </form>
+                            {% elif user.is_authenticated and has_reviewed %}
+                            <div class="alert alert-info mb-0">
+                                <i class="fa fa-info-circle me-1"></i> You have already reviewed this house.
+                            </div>
+                            {% else %}
+                            <div class="alert alert-info mb-0">
+                                <a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add a review.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,753 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="property-form-container">
+    <div class="property-form-background">
+        <div class="property-form-overlay"></div>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row min-vh-100 align-items-center justify-content-center">
+            <div class="col-12">
+                <div class="property-form-wrapper">
+                    <div class="property-form-card">
+                        <div class="form-header text-center mb-4">
+                            <div class="form-icon mb-3">
+                                <div class="icon-wrapper">
+                                    <i class="fa fa-plus-circle"></i>
+                                </div>
+                            </div>
+                            <h1 class="form-title">List Your Property</h1>
+                            <p class="form-subtitle">Share your property details and reach potential tenants</p>
+                        </div>
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger alert-modern" role="alert">
+                                <i class="fa fa-exclamation-triangle me-2"></i>
+                                <strong>Please correct the errors below:</strong>
+                                <ul class="mb-0 mt-2">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li><strong>{{ field|capfirst }}:</strong> {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                        <form method="post" enctype="multipart/form-data" class="property-form">
+                            {% csrf_token %}
+                            
+                            <!-- Property Basics Section -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fa fa-home me-2"></i>
+                                    Property Information
+                                </h3>
+                                
+                                <div class="row g-3">
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="{{ form.name.id_for_label }}" class="form-label">
+                                                <i class="fa fa-building me-2"></i>Property Name *
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-building"></i>
+                                                </span>
+                                                {{ form.name }}
+                                            </div>
+                                            {% if form.name.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ form.name.errors.0 }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="{{ form.price.id_for_label }}" class="form-label">
+                                                <i class="fa fa-rupee-sign me-2"></i>Monthly Rent *
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-rupee-sign"></i>
+                                                </span>
+                                                {{ form.price }}
+                                            </div>
+                                            {% if form.price.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ form.price.errors.0 }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="{{ form.location.id_for_label }}" class="form-label">
+                                                <i class="fa fa-map-marker-alt me-2"></i>Location *
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-map-marker-alt"></i>
+                                                </span>
+                                                {{ form.location }}
+                                            </div>
+                                            {% if form.location.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ form.location.errors.0 }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Property Details Section -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fa fa-th-large me-2"></i>
+                                    Property Details
+                                </h3>
+                                
+                                <div class="row g-3">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="{{ form.bedrooms.id_for_label }}" class="form-label">
+                                                <i class="fa fa-bed me-2"></i>Bedrooms *
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-bed"></i>
+                                                </span>
+                                                {{ form.bedrooms }}
+                                            </div>
+                                            {% if form.bedrooms.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ form.bedrooms.errors.0 }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="{{ form.beds.id_for_label }}" class="form-label">
+                                                <i class="fa fa-couch me-2"></i>Total Beds *
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-couch"></i>
+                                                </span>
+                                                {{ form.beds }}
+                                            </div>
+                                            {% if form.beds.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ form.beds.errors.0 }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="{{ form.bathrooms.id_for_label }}" class="form-label">
+                                                <i class="fa fa-bath me-2"></i>Bathrooms *
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-bath"></i>
+                                                </span>
+                                                {{ form.bathrooms }}
+                                            </div>
+                                            {% if form.bathrooms.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ form.bathrooms.errors.0 }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Image Upload Section -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fa fa-camera me-2"></i>
+                                    Property Images
+                                </h3>
+                                <div class="image-upload-area">
+                                    <div class="upload-zone" id="uploadZone">
+                                        <div class="upload-content">
+                                            <i class="fa fa-cloud-upload-alt upload-icon"></i>
+                                            <h4>Upload Property Images</h4>
+                                            <p>Drag and drop images here, or click to select (max 10)</p>
+                                            <div class="upload-formats">
+                                                <span>JPG, PNG, GIF up to 10MB each</span>
+                                            </div>
+                                        </div>
+                                        <input type="file" name="images" id="images" class="form-control" multiple accept="image/*" required>
+                                    </div>
+                                    <div id="imagePreview" class="image-preview d-none">
+                                        <!-- JS will show previews -->
+                                    </div>
+                                    {% if form.image.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.image.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Description Section -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fa fa-align-left me-2"></i>
+                                    Property Description
+                                </h3>
+                                
+                                <div class="form-group">
+                                    <label for="{{ form.description.id_for_label }}" class="form-label">
+                                        <i class="fa fa-edit me-2"></i>Detailed Description *
+                                    </label>
+                                    {{ form.description }}
+                                    <div class="form-text">
+                                        Describe your property in detail. Include amenities, nearby facilities, and any special features.
+                                    </div>
+                                    {% if form.description.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.description.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Information Section -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fa fa-user-circle me-2"></i>
+                                    Contact Information
+                                </h3>
+                                <div class="row g-3">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="contact_name" class="form-label">
+                                                <i class="fa fa-user"></i> Contact Name *
+                                            </label>
+                                            <input type="text" name="contact_name" id="contact_name" class="form-control" required placeholder="Enter contact name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="contact_mobile" class="form-label">
+                                                <i class="fa fa-phone"></i> Mobile Number *
+                                            </label>
+                                            <input type="tel" name="contact_mobile" id="contact_mobile" class="form-control" required placeholder="Enter mobile number">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="contact_email" class="form-label">
+                                                <i class="fa fa-envelope"></i> Email ID *
+                                            </label>
+                                            <input type="email" name="contact_email" id="contact_email" class="form-control" required placeholder="Enter email address">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Form Actions -->
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <a href="{% url 'house-list' %}" class="btn btn-outline-secondary w-100">
+                                            <i class="fa fa-arrow-left me-2"></i>
+                                            Cancel
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <button type="submit" class="btn btn-accent w-100 submit-btn">
+                                            <i class="fa fa-plus me-2"></i>
+                                            List Property
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .property-form-container {
+        min-height: 100vh;
+        position: relative;
+        padding-top: 80px;
+    }
+    
+    .property-form-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, 
+            var(--bg-light) 0%, 
+            rgba(59, 130, 246, 0.05) 50%, 
+            rgba(30, 41, 59, 0.05) 100%);
+        z-index: -2;
+    }
+    
+    .property-form-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, 
+            rgba(248, 250, 252, 0.9) 0%, 
+            rgba(255, 255, 255, 0.95) 100%);
+        z-index: -1;
+    }
+    
+    .property-form-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+    
+    .property-form-card {
+        background: var(--bg-white);
+        border-radius: 1.5rem;
+        padding: 3rem 2.5rem;
+        box-shadow: var(--shadow-xl);
+        width: 100%;
+        max-width: 900px;
+        border: 1px solid var(--border-light);
+    }
+    
+    .form-header .form-icon {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .form-header .icon-wrapper {
+        width: 80px;
+        height: 80px;
+        background: var(--gradient-accent);
+        border-radius: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .form-header .icon-wrapper i {
+        color: white;
+        font-size: 2rem;
+    }
+    
+    .form-title {
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        font-family: var(--font-heading);
+    }
+    
+    .form-subtitle {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+    
+    .form-section {
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: var(--bg-light);
+        border-radius: 1rem;
+        border: 1px solid var(--border-light);
+    }
+    
+    .section-title {
+        color: var(--text-dark);
+        font-weight: 600;
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        font-family: var(--font-heading);
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--accent-light);
+        display: inline-block;
+    }
+    
+    .form-label {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .form-control {
+        border: 2px solid var(--border-light);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: var(--bg-white);
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
+        background: var(--bg-white);
+    }
+    
+    .input-group-text {
+        background: var(--bg-white);
+        border: 2px solid var(--border-light);
+        border-right: none;
+        color: var(--accent);
+        border-radius: 0.75rem 0 0 0.75rem;
+        font-weight: 600;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+        border-radius: 0 0.75rem 0.75rem 0;
+    }
+    
+    .input-group:focus-within .input-group-text {
+        border-color: var(--accent);
+        color: var(--accent-dark);
+    }
+    
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    .image-upload-area {
+        margin-top: 1rem;
+    }
+    
+    .upload-zone {
+        border: 3px dashed var(--border-light);
+        border-radius: 1rem;
+        padding: 3rem 2rem;
+        text-align: center;
+        background: var(--bg-white);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .upload-zone:hover {
+        border-color: var(--accent);
+        background: rgba(59, 130, 246, 0.05);
+    }
+    
+    .upload-zone.dragover {
+        border-color: var(--accent);
+        background: rgba(59, 130, 246, 0.1);
+        transform: scale(1.02);
+    }
+    
+    .upload-content .upload-icon {
+        font-size: 3rem;
+        color: var(--accent);
+        margin-bottom: 1rem;
+    }
+    
+    .upload-content h4 {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .upload-content p {
+        color: var(--text-light);
+        margin-bottom: 1rem;
+    }
+    
+    .upload-formats {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+    }
+    
+    .upload-zone input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .image-preview {
+        position: relative;
+        margin-top: 1rem;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .image-preview img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 1rem;
+    }
+    
+    .remove-image {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .form-text {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+    
+    .form-actions {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-light);
+    }
+    
+    .submit-btn {
+        padding: 1rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    .btn-outline-secondary {
+        border: 2px solid var(--border-light);
+        color: var(--text-light);
+        border-radius: 0.75rem;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background: var(--text-light);
+        border-color: var(--text-light);
+        color: white;
+        transform: translateY(-1px);
+    }
+    
+    .alert-modern {
+        border: none;
+        border-radius: 0.75rem;
+        border-left: 4px solid var(--danger);
+        background: rgba(239, 68, 68, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .invalid-feedback {
+        color: var(--danger);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+    
+    @media (max-width: 991.98px) {
+        .property-form-card {
+            padding: 2rem 1.5rem;
+            margin: 1rem;
+        }
+        
+        .form-section {
+            padding: 1.5rem;
+        }
+        
+        .form-title {
+            font-size: 2rem;
+        }
+        
+        .property-form-container {
+            padding-top: 100px;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .property-form-card {
+            padding: 1.5rem 1rem;
+            border-radius: 1rem;
+        }
+        
+        .form-section {
+            padding: 1rem;
+        }
+        
+        .upload-zone {
+            padding: 2rem 1rem;
+        }
+        
+        .form-actions .row > div {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add Bootstrap classes to form fields
+        const formControls = document.querySelectorAll('.property-form input, .property-form select, .property-form textarea');
+        formControls.forEach(function(control) {
+            if (!control.classList.contains('form-control') && control.type !== 'file') {
+                control.classList.add('form-control');
+            }
+        });
+        
+        // Image upload functionality
+        const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+        const uploadZone = document.getElementById('uploadZone');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        
+        if (imageInput && uploadZone) {
+            // Click to upload
+            uploadZone.addEventListener('click', function() {
+                imageInput.click();
+            });
+            
+            // Drag and drop
+            uploadZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+            
+            uploadZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+            });
+            
+            uploadZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    imageInput.files = files;
+                    handleImagePreview(files[0]);
+                }
+            });
+            
+            // File input change
+            imageInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleImagePreview(e.target.files[0]);
+                }
+            });
+        }
+        
+        function handleImagePreview(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    uploadZone.classList.add('d-none');
+                    imagePreview.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+    
+    function removeImage() {
+        const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+        const uploadZone = document.getElementById('uploadZone');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        imageInput.value = '';
+        uploadZone.classList.remove('d-none');
+        imagePreview.classList.add('d-none');
+    }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('images');
+    const uploadZone = document.getElementById('uploadZone');
+    const imagePreview = document.getElementById('imagePreview');
+
+    // Click to upload
+    uploadZone.addEventListener('click', function() {
+        imageInput.click();
+    });
+
+    // Drag and drop
+    uploadZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadZone.classList.add('dragover');
+    });
+
+    uploadZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+    });
+
+    uploadZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            imageInput.files = files;
+            handleImagePreview(files);
+        }
+    });
+
+    // File input change
+    imageInput.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            handleImagePreview(e.target.files);
+        }
+    });
+
+    function handleImagePreview(files) {
+        imagePreview.innerHTML = '';
+        let shown = 0;
+        for (let i = 0; i < files.length && shown < 10; i++) {
+            const file = files[i];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'mb-2';
+                    img.style.maxHeight = '200px';
+                    img.style.marginRight = '10px';
+                    imagePreview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+                shown++;
+            }
+        }
+        uploadZone.classList.add('d-none');
+        imagePreview.classList.remove('d-none');
+    }
+});
+</script>
+{% endblock %}

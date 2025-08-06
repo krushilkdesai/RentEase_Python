@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-background">
+        <div class="auth-overlay"></div>
+    </div>
+    
+    <div class="container-fluid h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-12">
+                <div class="auth-form-container">
+                    <div class="auth-card-centered">
+                        <div class="auth-header text-center mb-4">
+                            <div class="brand-logo mb-3">
+                                <div class="brand-icon-wrapper">
+                                    <i class="fa fa-building brand-icon"></i>
+                                </div>
+                            </div>
+                            <h2 class="auth-title">Sign In</h2>
+                            <p class="auth-subtitle">Access your account to continue</p>
+                        </div>
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger alert-modern" role="alert">
+                                <i class="fa fa-exclamation-triangle me-2"></i>
+                                <strong>Please correct the errors below:</strong>
+                                <ul class="mb-0 mt-2">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                        <form method="post" class="auth-form">
+                            {% csrf_token %}
+                            
+                            <div class="form-group mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label">
+                                    <i class="fa fa-user me-2"></i>Username
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                    {{ form.username }}
+                                </div>
+                                {% if form.username.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.username.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group mb-4">
+                                <label for="{{ form.password.id_for_label }}" class="form-label">
+                                    <i class="fa fa-lock me-2"></i>Password
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    {{ form.password }}
+                                    <button class="btn btn-outline-secondary password-toggle" type="button" id="passwordToggle">
+                                        <i class="fa fa-eye" id="passwordIcon"></i>
+                                    </button>
+                                </div>
+                                {% if form.password.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.password.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me">
+                                <label class="form-check-label" for="rememberMe">
+                                    Remember me for 30 days
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-accent w-100 auth-btn mb-4">
+                                <i class="fa fa-sign-in-alt me-2"></i>
+                                Sign In
+                            </button>
+                            
+                            <div class="auth-divider mb-4">
+                                <span>or</span>
+                            </div>
+                            
+                            <div class="auth-links text-center">
+
+                                <p class="mb-0">
+                                    Don't have an account? 
+                                    <a href="{% url 'register' %}" class="link-accent fw-semibold">Create Account</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-container {
+        min-height: 100vh;
+        position: relative;
+        padding-top: 80px;
+    }
+    
+    .auth-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, 
+            var(--primary) 0%, 
+            var(--primary-light) 50%, 
+            var(--accent) 100%);
+        z-index: -2;
+    }
+    
+    .auth-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, 
+            rgba(30, 41, 59, 0.9) 0%, 
+            rgba(51, 65, 85, 0.8) 50%, 
+            rgba(59, 130, 246, 0.8) 100%);
+        z-index: -1;
+    }
+    
+    .auth-form-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 2rem 1rem;
+    }
+    
+    .auth-card-centered {
+        background: var(--bg-white);
+        border-radius: 1.5rem;
+        padding: 3rem 2.5rem;
+        box-shadow: var(--shadow-xl);
+        width: 100%;
+        max-width: 450px;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-light);
+        margin: 0 auto;
+    }
+    
+    .auth-header .brand-logo {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .auth-header .brand-icon-wrapper {
+        width: 60px;
+        height: 60px;
+        background: var(--gradient-accent);
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .auth-header .brand-icon {
+        color: white;
+        font-size: 1.5rem;
+    }
+    
+    .auth-title {
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .auth-subtitle {
+        color: var(--text-light);
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+    
+    .form-label {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border: 2px solid var(--border-light);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: var(--bg-light);
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
+        background: var(--bg-white);
+    }
+    
+    .input-group-text {
+        background: var(--bg-light);
+        border: 2px solid var(--border-light);
+        border-right: none;
+        color: var(--text-light);
+        border-radius: 0.75rem 0 0 0.75rem;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+        border-radius: 0 0.75rem 0.75rem 0;
+    }
+    
+    .input-group:focus-within .input-group-text {
+        border-color: var(--accent);
+        background: var(--bg-white);
+        color: var(--accent);
+    }
+    
+    .password-toggle {
+        border: 2px solid var(--border-light);
+        border-left: none;
+        border-radius: 0 0.75rem 0.75rem 0;
+        background: var(--bg-light);
+        color: var(--text-light);
+        transition: all 0.3s ease;
+    }
+    
+    .password-toggle:hover {
+        background: var(--accent-light);
+        color: white;
+        border-color: var(--accent-light);
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--accent);
+        border-color: var(--accent);
+    }
+    
+    .form-check-label {
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+    
+    .auth-btn {
+        padding: 0.875rem 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .auth-btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    .auth-divider {
+        position: relative;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    
+    .auth-divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--border-light);
+        z-index: 0;
+    }
+    
+    .auth-divider span {
+        background: var(--bg-white);
+        padding: 0 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .link-accent {
+        color: var(--accent);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .link-accent:hover {
+        color: var(--accent-dark);
+        text-decoration: underline;
+    }
+    
+    .link-primary {
+        color: var(--text-light);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .link-primary:hover {
+        color: var(--accent);
+        text-decoration: underline;
+    }
+    
+    .alert-modern {
+        border: none;
+        border-radius: 0.75rem;
+        border-left: 4px solid var(--danger);
+    }
+    
+    .invalid-feedback {
+        color: var(--danger);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    
+    @media (max-width: 991.98px) {
+        .auth-card-centered {
+            padding: 2rem 1.5rem;
+            margin: 1rem;
+        }
+        
+        .auth-container {
+            padding-top: 100px;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .auth-card-centered {
+            padding: 1.5rem 1rem;
+            border-radius: 1rem;
+        }
+        
+        .auth-title {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password toggle functionality
+        const passwordToggle = document.getElementById('passwordToggle');
+        const passwordField = document.getElementById('{{ form.password.id_for_label }}');
+        const passwordIcon = document.getElementById('passwordIcon');
+        
+        if (passwordToggle && passwordField) {
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                
+                if (type === 'text') {
+                    passwordIcon.classList.remove('fa-eye');
+                    passwordIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordIcon.classList.remove('fa-eye-slash');
+                    passwordIcon.classList.add('fa-eye');
+                }
+            });
+        }
+        
+        // Add Bootstrap classes to form fields
+        const formControls = document.querySelectorAll('.auth-form input');
+        formControls.forEach(function(control) {
+            if (!control.classList.contains('form-check-input')) {
+                control.classList.add('form-control');
+            }
+        });
+    });
+</script>
+{% endblock %}

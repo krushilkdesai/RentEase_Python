@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentEase</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d47a1; /* Changed to a deep blue */
+            --primary-light: #1976d2;
+            --primary-dark: #002171;
+            --accent: #ff9800;   /* Orange accent */
+            --accent-light: #ffc947;
+            --accent-dark: #c66900;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --text-muted: #94a3b8;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Roboto', sans-serif;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+        }
+        html, body {
+            font-family: var(--font-body);
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: var(--font-heading);
+        }
+        .navbar-gradient {
+            background: var(--gradient-primary) !important;
+            color: #fff !important;
+        }
+        .navbar .navbar-brand,
+        .navbar .nav-link,
+        .navbar .dropdown-toggle {
+            color: #fff !important;
+        }
+        .navbar .nav-link.active,
+        .navbar .nav-link:hover,
+        .navbar .nav-link:focus {
+            color: var(--accent) !important;
+        }
+        .navbar .dropdown-menu {
+            background: #fff;
+            color: var(--primary);
+        }
+        .navbar .dropdown-item {
+            color: var(--primary);
+        }
+        .navbar .dropdown-item:hover {
+            background: var(--accent-light);
+            color: #fff;
+        }
+        .navbar .btn-accent {
+            background: var(--accent);
+            color: #fff;
+        }
+        .navbar .btn-accent:hover {
+            background: var(--accent-dark);
+            color: #fff;
+        }
+        .navbar .btn-outline-primary {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .navbar .btn-outline-primary:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+        .hero-section {
+            min-height: 60vh;
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(30,41,59,0.8) 0%, rgba(51,65,85,0.6) 100%);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            text-align: center;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+        .search-bar {
+            background: var(--bg-white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-xl);
+            padding: 2rem 2.5rem;
+            margin-top: -3rem;
+            position: relative;
+            z-index: 3;
+            border: 1px solid var(--border-light);
+        }
+        .property-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            background: var(--bg-white);
+            overflow: hidden;
+        }
+        .property-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+        .property-card .card-img-top {
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            height: 220px;
+            object-fit: cover;
+        }
+        .btn-accent {
+            background: var(--gradient-accent);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+        .btn-accent:hover {
+            background: var(--accent-dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        footer {
+            background: var(--primary);
+            color: #fff;
+            padding: 2rem 0 1rem 0;
+        }
+        .footer-links a {
+            color: #fff;
+            margin-right: 1.2rem;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: var(--accent-light);
+        }
+        .footer-social a {
+            color: #fff;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .footer-social a:hover {
+            color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    {% block navbar %}
+    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-gradient shadow-sm fixed-top py-2 transition-navbar">
+        <div class="container">
+            <!-- Logo Area -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'house-list' %}" style="color: #222;">
+                <div class="brand-icon-wrapper me-2">
+                    <i class="fa fa-building fa-lg brand-icon"></i>
+                </div>
+                <span class="fw-bold brand-text" style="color: #222;">RentEase</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'house-list' and not request.GET %}active{% endif %}" href="{% url 'house-list' %}" style="color: #222;"><i class="fa fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}" style="color: #222;"><i class="fa fa-info-circle me-1"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}" style="color: #222;"><i class="fa fa-envelope me-1"></i> Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #222;">
+                            {% if user.userprofile.profile_image %}
+                                <img src="{{ user.userprofile.profile_image.url }}" alt="Profile" class="rounded-circle me-2" style="width:32px; height:32px; object-fit:cover;">
+                            {% else %}
+                                <span class="rounded-circle bg-secondary d-inline-block me-2" style="width:32px; height:32px;"></span>
+                            {% endif %}
+                            <span>{{ user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fa fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'house-add' %}"><i class="fa fa-plus me-2"></i>Post Property</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item"><i class="fa fa-sign-out-alt me-2"></i>Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="{% url 'house-add' %}" class="btn btn-accent ms-2 d-none d-lg-inline-block post-property-btn">
+                        <i class="fa fa-plus me-1"></i> 
+                        <span>Post Property</span>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'house-add' %}" class="btn btn-accent ms-2 d-none d-lg-inline-block post-property-btn">
+                        <i class="fa fa-plus me-1"></i> 
+                        <span>Post Property</span>
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary ms-2"><i class="fa fa-user me-1"></i> Login/Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            var navbar = document.getElementById('mainNavbar');
+            if (window.scrollY > 40) {
+                navbar.classList.add('navbar-solid', 'shadow');
+            } else {
+                navbar.classList.remove('navbar-solid', 'shadow');
+            }
+        });
+    </script>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="mt-auto">
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-6 mb-3 mb-md-0 text-start">
+                    <span class="fs-5 fw-bold">RentEase</span>
+                    <span class="ms-3 text-muted">&copy; {{ now|date:'Y' }} All rights reserved.</span>
+                </div>
+                <div class="col-md-6 footer-links text-end">
+                    <a href="{% url 'house-list' %}">Home</a>
+                    <a href="{% url 'about' %}">About</a>
+                    <a href="{% url 'contact' %}">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init({ once: true });
+    </script>
+</body>
+</html>

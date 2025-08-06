@@ -1,0 +1,599 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}{{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative">
+    <div class="hero-overlay"></div>
+    <div class="hero-content" data-aos="fade-up">
+        <h1>About RentEase</h1>
+        <p>Your trusted partner in finding the perfect rental property</p>
+    </div>
+</section>
+
+<!-- About Content -->
+<section class="about-container">
+    <div class="container">
+        <!-- Company Overview -->
+        <div class="about-section" data-aos="fade-up">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-content">
+                        <h2>Who We Are</h2>
+                        <p class="lead">RentEase is a leading real estate platform dedicated to connecting property seekers with their ideal rental homes. Since our founding, we've been committed to making the rental process simple, transparent, and efficient for everyone.</p>
+                        <p>Our platform brings together property owners, tenants, and professional real estate agents in one comprehensive ecosystem. Whether you're looking for your first apartment, a family home, or investment property, we're here to help you every step of the way.</p>
+                        <div class="company-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">5,000+</span>
+                                <span class="stat-label">Properties Listed</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">25,000+</span>
+                                <span class="stat-label">Happy Customers</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">500+</span>
+                                <span class="stat-label">Partner Agents</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80" alt="Modern office building" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission & Vision -->
+        <div class="mission-vision-section" data-aos="fade-up" data-aos-delay="100">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="mission-card">
+                        <div class="card-icon">
+                            <i class="fa fa-bullseye"></i>
+                        </div>
+                        <h3>Our Mission</h3>
+                        <p>To revolutionize the rental property market by providing a seamless, transparent, and user-friendly platform that connects property seekers with their perfect homes while empowering property owners to reach qualified tenants efficiently.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="vision-card">
+                        <div class="card-icon">
+                            <i class="fa fa-eye"></i>
+                        </div>
+                        <h3>Our Vision</h3>
+                        <p>To become the world's most trusted and comprehensive real estate platform, where every property transaction is smooth, secure, and satisfying for all parties involved, creating lasting relationships and building communities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Values -->
+        <div class="values-section" data-aos="fade-up" data-aos-delay="200">
+            <div class="section-header text-center">
+                <h2>Our Core Values</h2>
+                <p>The principles that guide everything we do</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fa fa-handshake"></i>
+                        </div>
+                        <h4>Trust & Transparency</h4>
+                        <p>We believe in honest, transparent communication and building lasting relationships based on trust and integrity.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <h4>Excellence</h4>
+                        <p>We strive for excellence in everything we do, from our platform design to customer service and property listings.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <h4>Customer Focus</h4>
+                        <p>Our customers are at the heart of everything we do. We listen, adapt, and continuously improve to meet their needs.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fa fa-lightbulb"></i>
+                        </div>
+                        <h4>Innovation</h4>
+                        <p>We embrace technology and innovation to create better experiences and solve real-world problems in real estate.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fa fa-globe"></i>
+                        </div>
+                        <h4>Community</h4>
+                        <p>We're committed to building strong communities by connecting people with homes and neighborhoods they love.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fa fa-shield-alt"></i>
+                        </div>
+                        <h4>Security</h4>
+                        <p>We prioritize the security and privacy of our users' data and ensure all transactions are safe and secure.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
+
+        <!-- Call to Action -->
+        <div class="cta-section" data-aos="fade-up" data-aos-delay="500">
+            <div class="cta-content text-center">
+                <h2>Ready to Find Your Perfect Home?</h2>
+                <p>Join thousands of satisfied customers who found their dream rental through RentEase.</p>
+                <div class="cta-buttons">
+                    <a href="{% url 'house-list' %}" class="btn btn-accent btn-lg">
+                        <i class="fa fa-search me-2"></i>
+                        Browse Properties
+                    </a>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-secondary btn-lg">
+                        <i class="fa fa-envelope me-2"></i>
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .about-container {
+        padding: 3rem 0;
+    }
+    
+    .about-section {
+        padding: 3rem 0;
+    }
+    
+    .about-content h2 {
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        font-family: var(--font-heading);
+    }
+    
+    .about-content .lead {
+        font-size: 1.25rem;
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+    }
+    
+    .about-content p {
+        color: var(--text-light);
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+    }
+    
+    .company-stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        display: block;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        font-family: var(--font-heading);
+    }
+    
+    .stat-label {
+        display: block;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+    
+    .about-image {
+        text-align: center;
+    }
+    
+    .about-image img {
+        border-radius: 1rem;
+        box-shadow: var(--shadow-lg);
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .mission-vision-section {
+        padding: 4rem 0;
+        background: var(--bg-light);
+        border-radius: 1rem;
+        margin: 3rem 0;
+    }
+    
+    .mission-card,
+    .vision-card {
+        background: var(--bg-white);
+        border-radius: 1rem;
+        padding: 2.5rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        height: 100%;
+        text-align: center;
+    }
+    
+    .card-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--gradient-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+    }
+    
+    .mission-card h3,
+    .vision-card h3 {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-family: var(--font-heading);
+    }
+    
+    .mission-card p,
+    .vision-card p {
+        color: var(--text-light);
+        line-height: 1.6;
+    }
+    
+    .values-section {
+        padding: 4rem 0;
+    }
+    
+    .section-header {
+        margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-family: var(--font-heading);
+    }
+    
+    .section-header p {
+        color: var(--text-light);
+        font-size: 1.1rem;
+    }
+    
+    .value-item {
+        text-align: center;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        background: var(--bg-white);
+        border-radius: 1rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        transition: all 0.3s ease;
+    }
+    
+    .value-item:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .value-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--gradient-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .value-item h4 {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-family: var(--font-heading);
+    }
+    
+    .value-item p {
+        color: var(--text-light);
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    .how-it-works-section {
+        padding: 4rem 0;
+        background: var(--bg-light);
+        border-radius: 1rem;
+        margin: 3rem 0;
+    }
+    
+    .step-item {
+        text-align: center;
+        padding: 2rem;
+        position: relative;
+        background: var(--bg-white);
+        border-radius: 1rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .step-item:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .step-number {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .step-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--gradient-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .step-item h4 {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-family: var(--font-heading);
+    }
+    
+    .step-item p {
+        color: var(--text-light);
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    .team-section {
+        padding: 4rem 0;
+    }
+    
+    .team-member {
+        text-align: center;
+        background: var(--bg-white);
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .team-member:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .member-image {
+        margin-bottom: 1.5rem;
+    }
+    
+    .member-image img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--accent-light);
+    }
+    
+    .member-info h4 {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-family: var(--font-heading);
+    }
+    
+    .member-role {
+        color: var(--accent);
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+    
+    .member-bio {
+        color: var(--text-light);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    
+    .member-social {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+        background: var(--accent-dark);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .cta-section {
+        padding: 4rem 0;
+        background: var(--gradient-primary);
+        border-radius: 1rem;
+        color: white;
+        text-align: center;
+    }
+    
+    .cta-content h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-family: var(--font-heading);
+    }
+    
+    .cta-content p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .cta-buttons .btn {
+        padding: 1rem 2rem;
+        font-weight: 600;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .cta-buttons .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .cta-buttons .btn-outline-secondary {
+        background: transparent;
+        border: 2px solid white;
+        color: white;
+    }
+    
+    .cta-buttons .btn-outline-secondary:hover {
+        background: white;
+        color: var(--primary);
+    }
+    
+    @media (max-width: 991.98px) {
+        .about-content {
+            margin-bottom: 2rem;
+        }
+        
+        .company-stats {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .mission-vision-section,
+        .how-it-works-section {
+            padding: 2rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        
+        .cta-content h2 {
+            font-size: 2rem;
+        }
+        
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .cta-buttons .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .about-container {
+            padding: 2rem 0;
+        }
+        
+        .about-section {
+            padding: 2rem 0;
+        }
+        
+        .about-content h2 {
+            font-size: 2rem;
+        }
+        
+        .company-stats {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .mission-card,
+        .vision-card {
+            padding: 1.5rem;
+        }
+        
+        .value-item,
+        .step-item,
+        .team-member {
+            padding: 1.5rem;
+        }
+        
+        .member-image img {
+            width: 100px;
+            height: 100px;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,811 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}{{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative">
+    <div class="hero-overlay"></div>
+    <div class="hero-content" data-aos="fade-up">
+        <h1>Find Your Perfect Home</h1>
+        <p>Discover amazing properties for rent with the best amenities and locations</p>
+        <a href="#properties-section" class="btn btn-accent btn-lg shadow-lg">
+            <i class="fa fa-search me-2"></i>
+            Explore Properties
+        </a>
+    </div>
+</section>
+
+<!-- Advanced Search Bar -->
+<section id="search-bar" class="container search-bar" data-aos="fade-up" data-aos-delay="200">
+    <div class="search-header text-center mb-4">
+        <h3>Find Your Ideal Property</h3>
+        <p class="text-muted">Use our advanced filters to discover properties that match your needs</p>
+    </div>
+    
+    <form class="search-form" method="GET">
+        <div class="row g-3">
+            <div class="col-lg-3 col-md-6">
+                <div class="search-field">
+                    <label for="location" class="form-label">
+                        <i class="fa fa-map-marker-alt me-2"></i>Location
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fa fa-map-marker-alt"></i>
+                        </span>
+                        <input type="text" class="form-control" id="location" name="location" 
+                               placeholder="City, Area, or Address" value="{{ request.GET.location }}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3">
+                <div class="search-field">
+                    <label for="price_min" class="form-label">
+                        <i class="fa fa-rupee-sign me-2"></i>Min Price
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" class="form-control" id="price_min" name="price_min" 
+                               placeholder="0" value="{{ request.GET.price_min }}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3">
+                <div class="search-field">
+                    <label for="price_max" class="form-label">
+                        <i class="fa fa-rupee-sign me-2"></i>Max Price
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" class="form-control" id="price_max" name="price_max" 
+                               placeholder="10000" value="{{ request.GET.price_max }}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3">
+                <div class="search-field">
+                    <label for="bedrooms" class="form-label">
+                        <i class="fa fa-bed me-2"></i>Bedrooms
+                    </label>
+                    <select class="form-select" id="bedrooms" name="bedrooms">
+                        <option value="">Any</option>
+                        <option value="1" {% if request.GET.bedrooms == "1" %}selected{% endif %}>1+</option>
+                        <option value="2" {% if request.GET.bedrooms == "2" %}selected{% endif %}>2+</option>
+                        <option value="3" {% if request.GET.bedrooms == "3" %}selected{% endif %}>3+</option>
+                        <option value="4" {% if request.GET.bedrooms == "4" %}selected{% endif %}>4+</option>
+                        <option value="5" {% if request.GET.bedrooms == "5" %}selected{% endif %}>5+</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3">
+                <div class="search-field">
+                    <label for="bathrooms" class="form-label">
+                        <i class="fa fa-bath me-2"></i>Bathrooms
+                    </label>
+                    <select class="form-select" id="bathrooms" name="bathrooms">
+                        <option value="">Any</option>
+                        <option value="1" {% if request.GET.bathrooms == "1" %}selected{% endif %}>1+</option>
+                        <option value="2" {% if request.GET.bathrooms == "2" %}selected{% endif %}>2+</option>
+                        <option value="3" {% if request.GET.bathrooms == "3" %}selected{% endif %}>3+</option>
+                        <option value="4" {% if request.GET.bathrooms == "4" %}selected{% endif %}>4+</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-lg-1 col-md-12">
+                <div class="search-actions">
+                    <label class="form-label d-none d-lg-block">&nbsp;</label>
+                    <button type="submit" class="btn btn-accent w-100 search-btn">
+                        <i class="fa fa-search me-2"></i>
+                        <span class="d-none d-lg-inline">Search</span>
+                        <span class="d-lg-none">Search Properties</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+       
+    </form>
+</section>
+
+<!-- Properties Section -->
+<section id="properties-section" class="container properties-container">
+    <!-- Section Header -->
+    <div class="properties-header" data-aos="fade-up">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2>Available Properties</h2>
+                <p class="text-muted mb-0">
+                    {% if houses %}
+                        Showing {{ houses|length }} of {{ houses|length }} properties
+                    {% else %}
+                        No properties found
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="view-controls">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-secondary active" data-view="grid">
+                            <i class="fa fa-th-large"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" data-view="list">
+                            <i class="fa fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Properties Grid -->
+    <div class="properties-grid" id="propertiesGrid">
+        {% for house in houses %}
+        <div class="property-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+            <div class="property-card">
+                <div class="property-image">
+                    {% if house.images.all %}
+                        {% with first_image=house.images.first %}
+                            {% if first_image %}
+                                <img src="{{ first_image.image.url }}" alt="{{ house.name }}">
+                            {% else %}
+                                {% if house.image %}
+                                    <img src="{{ house.image.url }}" alt="{{ house.name }}">
+                                {% else %}
+                                    <div class="image-placeholder">
+                                        <i class="fa fa-home"></i>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        {% if house.image %}
+                            <img src="{{ house.image.url }}" alt="{{ house.name }}">
+                        {% else %}
+                            <div class="image-placeholder">
+                                <i class="fa fa-home"></i>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <div class="property-overlay">
+                        <div class="property-actions">
+                            <button class="action-btn like-btn" data-property-id="{{ house.id }}">
+                                <i class="fa fa-heart"></i>
+                            </button>
+                            <button class="action-btn share-btn">
+                                <i class="fa fa-share-alt"></i>
+                            </button>
+                        </div>
+                        <div class="property-badge">
+                            <span class="badge bg-success">For Rent</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="property-content">
+                    <div class="property-header">
+                        <h3 class="property-title">{{ house.name }}</h3>
+                        <div class="property-price">
+                            <span class="price">₹ {{ house.price }}</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="property-location">
+                        <i class="fa fa-map-marker-alt me-2"></i>
+                        {{ house.location }}
+                    </div>
+                    
+                    <div class="property-features">
+                        <div class="feature">
+                            <i class="fa fa-bed"></i>
+                            <span>{{ house.bedrooms }} Bed</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fa fa-bath"></i>
+                            <span>{{ house.bathrooms }} Bath</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fa fa-couch"></i>
+                            <span>{{ house.beds }} Beds</span>
+                        </div>
+                    </div>
+                    
+                    <div class="property-description">
+                        {{ house.description|truncatechars:120 }}
+                    </div>
+                    
+                    <div class="property-footer">
+                        <div class="property-meta">
+                            <span class="posted-by">by {{ house.author.username }}</span>
+                            <span class="posted-date">{{ house.created_at|timesince }} ago</span>
+                        </div>
+                        <a href="{% url 'house-detail' house.pk %}" class="btn btn-accent view-btn">
+                            <i class="fa fa-eye me-2"></i>
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state" data-aos="fade-up">
+            <div class="empty-icon">
+                <i class="fa fa-home"></i>
+            </div>
+            <h3>No Properties Found</h3>
+            <p>Try adjusting your search criteria or browse all available properties.</p>
+            <a href="{% url 'house-list' %}" class="btn btn-accent">
+                <i class="fa fa-refresh me-2"></i>
+                Clear Filters
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="pagination-wrapper" data-aos="fade-up">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fa fa-angle-double-left"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            </li>
+            {% endif %}
+            
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fa fa-angle-double-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</section>
+
+<style>
+    .properties-container {
+        padding: 3rem 0;
+    }
+    
+    .search-header h3 {
+        color: var(--text-dark);
+        font-weight: 600;
+        font-family: var(--font-heading);
+    }
+    
+    .search-form {
+        background: var(--bg-white);
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-light);
+    }
+    
+    .search-field .form-label {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-select {
+        border: 2px solid var(--border-light);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
+    }
+    
+    .input-group-text {
+        background: var(--bg-light);
+        border: 2px solid var(--border-light);
+        border-right: none;
+        color: var(--accent);
+        border-radius: 0.75rem 0 0 0.75rem;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+        border-radius: 0 0.75rem 0.75rem 0;
+    }
+    
+    .input-group:focus-within .input-group-text {
+        border-color: var(--accent);
+    }
+    
+    .search-btn {
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .advanced-filters-toggle .btn-link {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .advanced-filters-panel {
+        background: var(--bg-light);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid var(--border-light);
+    }
+    
+    .properties-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .properties-header h2 {
+        color: var(--text-dark);
+        font-weight: 600;
+        font-family: var(--font-heading);
+        margin-bottom: 0.5rem;
+    }
+    
+    .view-controls {
+        text-align: right;
+    }
+    
+    .view-controls .btn-group .btn {
+        border-radius: 0.5rem;
+        border: 2px solid var(--border-light);
+        color: var(--text-light);
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .view-controls .btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+    }
+    
+    .properties-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .properties-grid.list-view {
+        grid-template-columns: 1fr;
+    }
+    
+    .properties-grid.list-view .property-card {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .properties-grid.list-view .property-image {
+        flex: 0 0 300px;
+        height: auto;
+        min-height: 200px;
+    }
+    
+    .properties-grid.list-view .property-content {
+        flex: 1;
+        padding: 1.5rem;
+    }
+    
+    .property-card {
+        background: var(--bg-white);
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        transition: all 0.3s ease;
+        height: fit-content;
+    }
+    
+    .property-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+    }
+    
+    .property-image {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+    
+    .property-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .property-card:hover .property-image img {
+        transform: scale(1.05);
+    }
+    
+    .image-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--bg-light) 0%, var(--border-light) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+        font-size: 3rem;
+    }
+    
+    .property-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .property-card:hover .property-overlay {
+        opacity: 1;
+    }
+    
+    .property-actions {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    .action-btn:hover {
+        background: var(--accent);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .like-btn:hover {
+        background: var(--danger);
+    }
+    
+    .property-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+    }
+    
+    .property-content {
+        padding: 1.5rem;
+    }
+    
+    .property-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+    
+    .property-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin: 0;
+        font-family: var(--font-heading);
+    }
+    
+    .property-price .price {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+    
+    .property-price .period {
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+    
+    .property-location {
+        color: var(--text-light);
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+    
+    .property-features {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .feature {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg-light);
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        color: var(--text-dark);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .feature i {
+        color: var(--accent);
+    }
+    
+    .property-description {
+        color: var(--text-light);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+    
+    .property-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-light);
+    }
+    
+    .property-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .posted-by {
+        font-size: 0.85rem;
+        color: var(--text-dark);
+        font-weight: 500;
+    }
+    
+    .posted-date {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+    
+    .view-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .view-btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+    }
+    
+    .empty-state h3 {
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state p {
+        color: var(--text-light);
+        margin-bottom: 2rem;
+    }
+    
+    .pagination-wrapper {
+        margin-top: 3rem;
+    }
+    
+    .pagination .page-link {
+        border: 2px solid var(--border-light);
+        color: var(--text-dark);
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin: 0 0.25rem;
+        transition: all 0.3s ease;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+    }
+    
+    .pagination .page-link:hover {
+        background: var(--accent-light);
+        border-color: var(--accent-light);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    @media (max-width: 991.98px) {
+        .properties-container {
+            padding: 2rem 0;
+        }
+        
+        .search-form {
+            padding: 1.5rem;
+        }
+        
+        .properties-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .properties-grid.list-view .property-card {
+            flex-direction: column;
+        }
+        
+        .properties-grid.list-view .property-image {
+            flex: none;
+            height: 250px;
+        }
+        
+        .view-controls {
+            text-align: left;
+            margin-top: 1rem;
+        }
+        
+        .property-header {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .property-features {
+            gap: 0.5rem;
+        }
+        
+        .property-footer {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .properties-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .search-form .row {
+            gap: 1rem;
+        }
+        
+        .search-actions .search-btn {
+            margin-top: 1rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // View toggle functionality
+        const viewButtons = document.querySelectorAll('[data-view]');
+        const propertiesGrid = document.getElementById('propertiesGrid');
+        
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                viewButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const view = this.dataset.view;
+                if (view === 'list') {
+                    propertiesGrid.classList.add('list-view');
+                } else {
+                    propertiesGrid.classList.remove('list-view');
+                }
+            });
+        });
+        
+        // Like button functionality
+        const likeButtons = document.querySelectorAll('.like-btn');
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.classList.toggle('liked');
+                const icon = this.querySelector('i');
+                if (this.classList.contains('liked')) {
+                    icon.classList.remove('fa-heart');
+                    icon.classList.add('fas', 'fa-heart');
+                    this.style.background = '#ef4444';
+                    this.style.color = 'white';
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('fa-heart');
+                    this.style.background = '';
+                    this.style.color = '';
+                }
+            });
+        });
+        
+        // Share button functionality
+        const shareButtons = document.querySelectorAll('.share-btn');
+        shareButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Check out this property',
+                        url: window.location.href
+                    });
+                } else {
+                    // Fallback for browsers without Web Share API
+                    navigator.clipboard.writeText(window.location.href);
+                    // Show toast or alert
+                    alert('Link copied to clipboard!');
+                }
+            });
+        });
+        
+        // Smooth scroll to properties section
+        const exploreBtn = document.querySelector('[href="#properties-section"]');
+        if (exploreBtn) {
+            exploreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('properties-section').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+

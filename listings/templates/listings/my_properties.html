@@ -1,0 +1,672 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="properties-dashboard">
+    <div class="dashboard-background">
+        <div class="dashboard-overlay"></div>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            <!-- Sidebar -->
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="dashboard-sidebar">
+                    <div class="sidebar-header">
+                        <div class="user-info">
+                            {% if user.userprofile.profile_image %}
+                                <img src="{{ user.userprofile.profile_image.url }}" alt="Profile" class="user-avatar">
+                            {% else %}
+                                <div class="user-avatar-placeholder">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            {% endif %}
+                            <div class="user-details">
+                                <h4>{{ user.get_full_name|default:user.username }}</h4>
+                                <p>Property Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <nav class="sidebar-nav">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">
+                                    <i class="fa fa-building me-2"></i>
+                                    My Properties
+                                    <span class="badge bg-primary ms-auto">{{ user.houses.count }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'house-add' %}">
+                                    <i class="fa fa-plus me-2"></i>
+                                    Add New Property
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="fa fa-heart me-2"></i>
+                                    Liked Properties
+                                    <span class="badge bg-danger ms-auto">{{ user.liked_houses.count }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profile' %}">
+                                    <i class="fa fa-user me-2"></i>
+                                    Profile Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="dashboard-content">
+                    <!-- Header -->
+                    <div class="dashboard-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h1 class="dashboard-title">My Properties</h1>
+                                <p class="dashboard-subtitle">Manage your property listings and track performance</p>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <a href="{% url 'house-add' %}" class="btn btn-accent btn-lg">
+                                    <i class="fa fa-plus me-2"></i>
+                                    Add New Property
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics Cards -->
+                    <div class="stats-section">
+                        <div class="row g-4">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-primary">
+                                        <i class="fa fa-building"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>{{ user.houses.count }}</h3>
+                                        <p>Total Properties</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-success">
+                                        <i class="fa fa-eye"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>1.2K</h3>
+                                        <p>Total Views</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-warning">
+                                        <i class="fa fa-heart"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>{{ user.houses.all|length }}</h3>
+                                        <p>Total Likes</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-info">
+                                        <i class="fa fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>$2.5K</h3>
+                                        <p>Avg. Price</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Properties List -->
+                    <div class="properties-section">
+                        <div class="section-header">
+                            <h2>Your Properties</h2>
+                            <div class="section-actions">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-secondary active" data-view="grid">
+                                        <i class="fa fa-th-large"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" data-view="list">
+                                        <i class="fa fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if user.houses.exists %}
+                        <div class="properties-grid" id="propertiesContainer">
+                            {% for house in user.houses.all %}
+                            <div class="property-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                                <div class="property-card">
+                                    <div class="property-image">
+                                        {% if house.image %}
+                                            <img src="{{ house.image.url }}" alt="{{ house.name }}">
+                                        {% else %}
+                                            <div class="image-placeholder">
+                                                <i class="fa fa-home"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="property-status">
+                                            <span class="status-badge active">Active</span>
+                                        </div>
+                                        <div class="property-actions">
+                                            <a href="#" class="action-btn" title="Edit">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a href="#" class="action-btn" title="View">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                            <a href="#" class="action-btn delete" title="Delete">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="property-content">
+                                        <h3 class="property-title">{{ house.name }}</h3>
+                                        <p class="property-location">
+                                            <i class="fa fa-map-marker-alt me-1"></i>
+                                            {{ house.location }}
+                                        </p>
+                                        <div class="property-features">
+                                            <span class="feature">
+                                                <i class="fa fa-bed"></i>
+                                                {{ house.bedrooms }}
+                                            </span>
+                                            <span class="feature">
+                                                <i class="fa fa-bath"></i>
+                                                {{ house.bathrooms }}
+                                            </span>
+                                            <span class="feature">
+                                                <i class="fa fa-couch"></i>
+                                                {{ house.beds }}
+                                            </span>
+                                        </div>
+                                        <div class="property-footer">
+                                            <div class="property-price">
+                                                ${{ house.price }}/month
+                                            </div>
+                                            <div class="property-stats">
+                                                <span class="stat">
+                                                    <i class="fa fa-eye"></i>
+                                                    125 views
+                                                </span>
+                                                <span class="stat">
+                                                    <i class="fa fa-heart"></i>
+                                                    {{ house.likes.count }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fa fa-home"></i>
+                            </div>
+                            <h3>No Properties Yet</h3>
+                            <p>Start building your rental portfolio by adding your first property.</p>
+                            <a href="{% url 'house-add' %}" class="btn btn-accent btn-lg">
+                                <i class="fa fa-plus me-2"></i>
+                                Add Your First Property
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .properties-dashboard {
+        min-height: 100vh;
+        position: relative;
+        padding-top: 80px;
+    }
+    
+    .dashboard-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-light);
+        z-index: -2;
+    }
+    
+    .dashboard-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, 
+            rgba(248, 250, 252, 0.95) 0%, 
+            rgba(255, 255, 255, 0.9) 100%);
+        z-index: -1;
+    }
+    
+    .dashboard-sidebar {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        height: calc(100vh - 80px);
+        width: 280px;
+        background: var(--bg-white);
+        border-right: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        overflow-y: auto;
+    }
+    
+    .sidebar-header {
+        padding: 2rem 1.5rem;
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .user-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--accent-light);
+    }
+    
+    .user-avatar-placeholder {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--gradient-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+    
+    .user-details h4 {
+        margin: 0;
+        color: var(--text-dark);
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .user-details p {
+        margin: 0;
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+    
+    .sidebar-nav {
+        padding: 1rem 0;
+    }
+    
+    .sidebar-nav .nav-link {
+        color: var(--text-light);
+        padding: 1rem 1.5rem;
+        border: none;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar-nav .nav-link:hover,
+    .sidebar-nav .nav-link.active {
+        background: var(--accent-light);
+        color: white;
+        transform: translateX(5px);
+    }
+    
+    .dashboard-content {
+        margin-left: 0;
+        padding: 2rem;
+    }
+    
+    @media (min-width: 992px) {
+        .dashboard-content {
+            margin-left: 280px;
+        }
+    }
+    
+    .dashboard-header {
+        margin-bottom: 3rem;
+    }
+    
+    .dashboard-title {
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        font-family: var(--font-heading);
+    }
+    
+    .dashboard-subtitle {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+    
+    .stats-section {
+        margin-bottom: 3rem;
+    }
+    
+    .stat-card {
+        background: var(--bg-white);
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .stat-content h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0;
+    }
+    
+    .stat-content p {
+        color: var(--text-light);
+        margin: 0;
+        font-size: 0.9rem;
+    }
+    
+    .properties-section {
+        background: var(--bg-white);
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .section-header h2 {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .properties-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    .property-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+        background: var(--bg-white);
+        border: 1px solid var(--border-light);
+    }
+    
+    .property-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .property-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+    
+    .property-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .property-card:hover .property-image img {
+        transform: scale(1.05);
+    }
+    
+    .image-placeholder {
+        width: 100%;
+        height: 100%;
+        background: var(--bg-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+        font-size: 3rem;
+    }
+    
+    .property-status {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+    }
+    
+    .status-badge {
+        background: var(--success);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .property-actions {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .property-card:hover .property-actions {
+        opacity: 1;
+    }
+    
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--border-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .action-btn:hover {
+        background: var(--accent);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .action-btn.delete:hover {
+        background: var(--danger);
+    }
+    
+    .property-content {
+        padding: 1.5rem;
+    }
+    
+    .property-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+    
+    .property-location {
+        color: var(--text-light);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .property-features {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .feature {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+    
+    .property-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-light);
+    }
+    
+    .property-price {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--accent);
+    }
+    
+    .property-stats {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+    }
+    
+    .empty-state h3 {
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state p {
+        color: var(--text-light);
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 991.98px) {
+        .dashboard-content {
+            margin-left: 0;
+            padding: 1rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2rem;
+        }
+        
+        .section-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .properties-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .stats-section .row {
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // View toggle functionality
+        const viewButtons = document.querySelectorAll('[data-view]');
+        const container = document.getElementById('propertiesContainer');
+        
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                viewButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const view = this.dataset.view;
+                if (view === 'list') {
+                    container.classList.add('list-view');
+                } else {
+                    container.classList.remove('list-view');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
